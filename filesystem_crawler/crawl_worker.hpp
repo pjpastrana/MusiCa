@@ -11,7 +11,7 @@ class CrawlWorker
 {
     public:
         virtual ~CrawlWorker(){};
-        virtual void do_something (const path item_path) = 0;
+        virtual void do_something (const path file) = 0;
 };
 
 #endif

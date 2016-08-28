@@ -11,7 +11,7 @@ class TagExtractorCrawlWorker : public CrawlWorker{
     public:
         TagExtractorCrawlWorker();
         ~TagExtractorCrawlWorker();
-        void do_something (const path item_path);
+        void do_something (const path file);
 };
 
 #endif

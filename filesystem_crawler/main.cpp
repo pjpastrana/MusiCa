@@ -4,7 +4,7 @@
 int main(int argc, char* argv[])
 {
 
-    FilesystemCrawler filesystem_crawler;
+    FilesystemCrawler filesystem_crawler("/Volumes/MRJONES/Music");
     filesystem_crawler.crawl();
     // if (argc < 2)
     // {

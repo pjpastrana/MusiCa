@@ -1,9 +1,10 @@
 #include "filesystem_crawler.hpp"
 
-FilesystemCrawler::FilesystemCrawler()
+FilesystemCrawler::FilesystemCrawler(string starting_directory)
 {
     // TODO: dependency injection, how to do that in c++
     crawl_worker = new TagExtractorCrawlWorker();
+    starting_directory_ = starting_directory;
 }
 
 FilesystemCrawler::~FilesystemCrawler()
@@ -14,8 +15,9 @@ FilesystemCrawler::~FilesystemCrawler()
 
 void FilesystemCrawler::crawl()
 {
-    cout << "ma look at me crawling" << endl;
-    recursive_directory_iterator iter("./");
+    // TODO: verify the directory exists, catch error if the directory does not exists
+    cout << "starting_directory " << starting_directory_ << endl;
+    recursive_directory_iterator iter(starting_directory_);
     recursive_directory_iterator end;
     for (; iter != end; ++iter) {
         // check for things like is_directory(iter->status()), iter->filename() ....

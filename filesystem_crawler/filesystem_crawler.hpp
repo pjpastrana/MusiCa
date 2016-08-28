@@ -15,11 +15,11 @@ using boost::filesystem::path;
 
 class FilesystemCrawler
 {
-    string root_directory;
+    string starting_directory_;
     CrawlWorker* crawl_worker;
 
     public:
-        FilesystemCrawler();
+        FilesystemCrawler(string starting_directory);
         ~FilesystemCrawler();
         void crawl();
 };
