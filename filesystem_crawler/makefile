@@ -1,9 +1,10 @@
 PROJECT_NAME = filesystem-crawler
 CC = g++
 CFLAGS = -c -Wall -g -std=c++11
-INCLUDES = -I/opt/local/include
+INCLUDES = -I/opt/local/include -I/opt/local/include/taglib
 LIBPATH = -L/opt/local/lib
-LIBS = -lboost_filesystem-mt -lboost_system-mt
+LIBS = -lboost_filesystem-mt -lboost_system-mt -ltag
+
 
 all: $(PROJECT_NAME)
 

@@ -7,9 +7,10 @@
 
 #include "tag_extractor_crawl_worker.hpp"
 
-// TODO: what is the best way to have use or include namespace items
 using namespace std;
-using namespace boost::filesystem;
+// TODO: check if including namespace elements is a good practice
+using boost::filesystem::recursive_directory_iterator;
+using boost::filesystem::path;
 
 
 class FilesystemCrawler

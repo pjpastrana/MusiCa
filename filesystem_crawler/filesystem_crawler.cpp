@@ -23,6 +23,7 @@ void FilesystemCrawler::crawl()
         // enter a directory
         // see all the possibilities by reading the docs.
         //cout << iter->path().filename() << endl;
-        crawl_worker->do_something(iter->path().filename().string());
+        // crawl_worker->do_something(iter->path().filename().string());
+        crawl_worker->do_something(iter->path());
     }
 }
