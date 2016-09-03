@@ -9,13 +9,18 @@
 #include <tpropertymap.h>
 
 #include "crawl_worker.hpp"
+#include "audio_file_metadata.hpp"
 
+// TODO: change name to AudioTagExtractorCrawlWorker
 class TagExtractorCrawlWorker : public CrawlWorker{
+
+    AudioFileMetadata* audio_file_metadata_;
 
     public:
         TagExtractorCrawlWorker();
         ~TagExtractorCrawlWorker();
-        void do_something (const path file);
+        FileMetadata* do_something (const path file);
+        bool is_valid_file(const path file);
         void extract_tags_from_file(const path file);
 };
 

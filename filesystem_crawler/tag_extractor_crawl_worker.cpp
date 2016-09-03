@@ -3,67 +3,68 @@
 using namespace std;
 
 TagExtractorCrawlWorker::TagExtractorCrawlWorker()
-{}
-
-TagExtractorCrawlWorker::~TagExtractorCrawlWorker()
-{}
-
-void TagExtractorCrawlWorker::do_something(const path file)
 {
-    if(exists(file) && is_regular_file(file))
-    {
-        // only working with user/data files (i.e. not hidden or system files)
-        std::cout << "Doing something to item " << file.string() << std::endl;
-        extract_tags_from_file(file);
-    }
-
+    audio_file_metadata_ = new AudioFileMetadata();
 }
 
-void TagExtractorCrawlWorker::extract_tags_from_file(const path file)
+TagExtractorCrawlWorker::~TagExtractorCrawlWorker()
 {
-    TagLib::FileRef f(file.c_str());
-    if(!f.isNull() && f.tag())
+    delete audio_file_metadata_;
+    audio_file_metadata_ = NULL;
+}
+
+FileMetadata* TagExtractorCrawlWorker::do_something(const path file)
+{
+    if(exists(file) && is_regular_file(file) && is_valid_file(file))
     {
-      TagLib::Tag *tag = f.tag();
-
-      cout << "-- TAG (basic) --" << endl;
-      cout << "title   - \"" << tag->title()   << "\"" << endl;
-      cout << "artist  - \"" << tag->artist()  << "\"" << endl;
-      cout << "album   - \"" << tag->album()   << "\"" << endl;
-      cout << "year    - \"" << tag->year()    << "\"" << endl;
-      cout << "comment - \"" << tag->comment() << "\"" << endl;
-      cout << "track   - \"" << tag->track()   << "\"" << endl;
-      cout << "genre   - \"" << tag->genre()   << "\"" << endl;
-
-      TagLib::PropertyMap tags = f.file()->properties();
-
-      unsigned int longest = 0;
-      for(TagLib::PropertyMap::ConstIterator i = tags.begin(); i != tags.end(); ++i) {
-        if (i->first.size() > longest) {
-          longest = i->first.size();
-        }
-      }
-
-      cout << "-- TAG (properties) --" << endl;
-      for(TagLib::PropertyMap::ConstIterator i = tags.begin(); i != tags.end(); ++i) {
-        for(TagLib::StringList::ConstIterator j = i->second.begin(); j != i->second.end(); ++j) {
-          cout << left << setw(longest) << i->first << " - " << '"' << *j << '"' << endl;
-        }
-      }
-
+        // only working with user/data files (i.e. not hidden or system files)
+        cout << "Doing something to item " << file.string() << endl;
+        extract_tags_from_file(file);
     }
+    FileMetadata* file_metadata = dynamic_cast<FileMetadata*>(audio_file_metadata_);
+    return file_metadata;
+}
 
-    if(!f.isNull() && f.audioProperties()) {
+bool TagExtractorCrawlWorker::is_valid_file(const path file_path)
+{
+    bool is_valid = false;
+    // TODO: refactor. create some sort of class or enum with the vaid types
+    if(file_path.extension() == ".mp3")
+        is_valid = true;
+    return is_valid;
+}
 
-      TagLib::AudioProperties *properties = f.audioProperties();
+void TagExtractorCrawlWorker::extract_tags_from_file(const path file_path)
+{
+    TagLib::FileRef file(file_path.c_str());
+    AudioFileMetadata audio_file_metadata;
 
-      int seconds = properties->length() % 60;
-      int minutes = (properties->length() - seconds) / 60;
+    if(!file.isNull() && file.tag())
+    {
+        TagLib::Tag *tag = file.tag();
+        audio_file_metadata_->file_name_ = file_path.filename().string();
+        audio_file_metadata_->file_location_ = file_path.string();
+        // TODO: how do I get the file size
+        // audio_file_metadata.file_size_;
+        audio_file_metadata_->title_ = tag->title().to8Bit();
+        audio_file_metadata_->artist_ = tag->artist().to8Bit();
+        audio_file_metadata_->album_ = tag->album().to8Bit();
+        audio_file_metadata_->year_ = to_string(tag->year());
+        audio_file_metadata_->track_ = to_string(tag->track());
+        audio_file_metadata_->genre_ = tag->genre().to8Bit();
 
-      cout << "-- AUDIO --" << endl;
-      cout << "bitrate     - " << properties->bitrate() << endl;
-      cout << "sample rate - " << properties->sampleRate() << endl;
-      cout << "channels    - " << properties->channels() << endl;
-      cout << "length      - " << minutes << ":" << setfill('0') << setw(2) << seconds << endl;
+        if(file.audioProperties())
+        {
+            TagLib::AudioProperties *properties = file.audioProperties();
+
+            int seconds = properties->length() % 60;
+            int minutes = (properties->length() - seconds) / 60;
+
+            audio_file_metadata_->bitrate_ = to_string(properties->bitrate());
+            audio_file_metadata_->sample_rate_ = to_string(properties->sampleRate());
+            audio_file_metadata_->channels_ = to_string(properties->channels());
+            audio_file_metadata_->length_in_minutes_ = to_string(minutes);
+            audio_file_metadata_->length_in_seconds_ = to_string(seconds);
+        }
     }
 }

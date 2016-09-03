@@ -1,16 +1,30 @@
 #include "filesystem_crawler.hpp"
+#include "audio_file_metadata.hpp"
+
+#include <rapidjson/prettywriter.h>
+#include <fstream>
+
+using rapidjson::StringBuffer;
+using rapidjson::PrettyWriter;
+
+void write_to_file(string file_name, string file_content)
+{
+    std::ofstream out(file_name);
+    out << file_content;
+    out.close();
+}
 
 FilesystemCrawler::FilesystemCrawler(string starting_directory)
 {
     // TODO: dependency injection, how to do that in c++
-    crawl_worker = new TagExtractorCrawlWorker();
+    crawl_worker_ = new TagExtractorCrawlWorker();
     starting_directory_ = starting_directory;
 }
 
 FilesystemCrawler::~FilesystemCrawler()
 {
-    delete crawl_worker;
-    crawl_worker = NULL;
+    delete crawl_worker_;
+    crawl_worker_ = NULL;
 }
 
 void FilesystemCrawler::crawl()
@@ -19,13 +33,39 @@ void FilesystemCrawler::crawl()
     cout << "starting_directory " << starting_directory_ << endl;
     recursive_directory_iterator iter(starting_directory_);
     recursive_directory_iterator end;
-    for (; iter != end; ++iter) {
-        // check for things like is_directory(iter->status()), iter->filename() ....
-        // optionally, you can call iter->no_push() if you don't want to
-        // enter a directory
-        // see all the possibilities by reading the docs.
-        //cout << iter->path().filename() << endl;
-        // crawl_worker->do_something(iter->path().filename().string());
-        crawl_worker->do_something(iter->path());
+    for (; iter != end; ++iter)
+    {
+        FileMetadata* file_metadata = crawl_worker_->do_something(iter->path());
+        // TODO: move the validation to fileMetadata object
+        if(file_metadata->file_name_ != "")
+        {
+            file_system_repository_.push_back(file_metadata);
+        }
     }
+    persist_repository();
+}
+
+void FilesystemCrawler::persist_repository()
+{
+    StringBuffer sb;
+    PrettyWriter<StringBuffer> writer(sb);
+
+    writer.StartArray();
+    // TODO: need to pass the type dynamically...this class should not know of the existance of AudioFileMetadata
+    vector<FileMetadata*>::const_iterator repository_itr = file_system_repository_.begin();
+    for (; repository_itr != file_system_repository_.end(); ++repository_itr)
+    {
+        FileMetadata* file_metadata_ptr = *repository_itr;
+        AudioFileMetadata* audio_file_metadata = dynamic_cast<AudioFileMetadata*>(file_metadata_ptr);
+        if(audio_file_metadata)
+        {
+            audio_file_metadata->serialize(writer);
+        }
+        
+    }
+    writer.EndArray();
+
+    // cout << sb.GetString() << endl;
+
+    write_to_file("music-repository.json", sb.GetString());
 }
