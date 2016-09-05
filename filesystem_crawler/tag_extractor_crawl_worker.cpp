@@ -4,24 +4,25 @@ using namespace std;
 
 TagExtractorCrawlWorker::TagExtractorCrawlWorker()
 {
-    audio_file_metadata_ = new AudioFileMetadata();
+    audio_file_metadata_ = NULL;
 }
 
 TagExtractorCrawlWorker::~TagExtractorCrawlWorker()
 {
-    delete audio_file_metadata_;
-    audio_file_metadata_ = NULL;
+    // delete audio_file_metadata_;
+    // audio_file_metadata_ = NULL;
 }
 
 FileMetadata* TagExtractorCrawlWorker::do_something(const path file)
 {
+    FileMetadata* file_metadata = NULL;
     if(exists(file) && is_regular_file(file) && is_valid_file(file))
     {
         // only working with user/data files (i.e. not hidden or system files)
         cout << "Doing something to item " << file.string() << endl;
         extract_tags_from_file(file);
+        file_metadata = dynamic_cast<FileMetadata*>(audio_file_metadata_);
     }
-    FileMetadata* file_metadata = dynamic_cast<FileMetadata*>(audio_file_metadata_);
     return file_metadata;
 }
 
@@ -37,10 +38,12 @@ bool TagExtractorCrawlWorker::is_valid_file(const path file_path)
 void TagExtractorCrawlWorker::extract_tags_from_file(const path file_path)
 {
     TagLib::FileRef file(file_path.c_str());
-    AudioFileMetadata audio_file_metadata;
 
     if(!file.isNull() && file.tag())
     {
+        // TODO: verify this
+        audio_file_metadata_ = new AudioFileMetadata();
+
         TagLib::Tag *tag = file.tag();
         audio_file_metadata_->file_name_ = file_path.filename().string();
         audio_file_metadata_->file_location_ = file_path.string();
