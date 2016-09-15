@@ -9,8 +9,8 @@ SRC_DIR = ../
 
 all: $(PROJECT_NAME)
 
-$(PROJECT_NAME):  main.o filesystem_crawler.o music_file_metadata_extractor_crawl_worker.o
-	$(CC) main.o filesystem_crawler.o music_file_metadata_extractor_crawl_worker.o -o $(PROJECT_NAME) $(LIBPATH) $(LIBS)
+$(PROJECT_NAME):  main.o filesystem_crawler.o music_file_metadata_extractor_crawl_worker.o audio_reader_crawl_worker.o
+	$(CC) main.o filesystem_crawler.o music_file_metadata_extractor_crawl_worker.o audio_reader_crawl_worker.o -o $(PROJECT_NAME) $(LIBPATH) $(LIBS)
     
 main.o: $(SRC_DIR)main.cpp
 	$(CC) $(CFLAGS) $(INCLUDES) $(SRC_DIR)main.cpp
@@ -20,6 +20,9 @@ filesystem_crawler.o: $(SRC_DIR)filesystem_crawler.cpp
 
 music_file_metadata_extractor_crawl_worker.o: $(SRC_DIR)music_file_metadata_extractor_crawl_worker.cpp
 	$(CC) $(CFLAGS) $(INCLUDES) $(SRC_DIR)music_file_metadata_extractor_crawl_worker.cpp
+
+audio_reader_crawl_worker.o: $(SRC_DIR)audio_reader_crawl_worker.cpp
+	$(CC) $(CFLAGS) $(INCLUDES) $(SRC_DIR)audio_reader_crawl_worker.cpp
 
 clean:
 	rm -rf *.o $(PROJECT_NAME) *.gch* *~ *.dSYM

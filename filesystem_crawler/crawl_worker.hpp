@@ -1,11 +1,14 @@
 #ifndef _CRAWL_WORKER_H_
 #define _CRAWL_WORKER_H_
 
+#include <iostream>
+#include <iomanip>
 #include <string>
 #include <boost/filesystem.hpp>
 
 #include "file_metadata.hpp"
 
+using namespace std;
 using boost::filesystem::path;
 
 // abstract class

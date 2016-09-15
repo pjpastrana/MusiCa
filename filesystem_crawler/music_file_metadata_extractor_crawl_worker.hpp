@@ -1,9 +1,6 @@
 #ifndef _MUSIC_FILE_METADATA_EXTRACTOR_CRAWL_WORKER_H_
 #define _MUSIC_FILE_METADATA_EXTRACTOR_CRAWL_WORKER_H_
 
-#include <iostream>
-#include <iomanip>
-#include <string>
 #include <fileref.h>
 #include <tag.h>
 #include <tpropertymap.h>
@@ -11,7 +8,8 @@
 #include "crawl_worker.hpp"
 #include "music_file_metadata.hpp"
 
-class MusicFileMetadataExtractorCrawlWorker : public CrawlWorker{
+class MusicFileMetadataExtractorCrawlWorker : public CrawlWorker
+{
 
     MusicFileMetadata* music_file_metadata_;
 

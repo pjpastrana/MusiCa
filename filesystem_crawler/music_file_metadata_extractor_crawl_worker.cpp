@@ -1,7 +1,5 @@
 #include "music_file_metadata_extractor_crawl_worker.hpp"
 
-using namespace std;
-
 MusicFileMetadataExtractorCrawlWorker::MusicFileMetadataExtractorCrawlWorker()
 {
     music_file_metadata_ = NULL;
