@@ -1,5 +1,5 @@
 #include "filesystem_crawler.hpp"
-#include "audio_file_metadata.hpp"
+#include "music_file_metadata.hpp"
 
 #include <rapidjson/prettywriter.h>
 #include <fstream>
@@ -17,7 +17,7 @@ void write_to_file(string file_name, string file_content)
 FilesystemCrawler::FilesystemCrawler(string starting_directory)
 {
     // TODO: dependency injection, how to do that in c++
-    crawl_worker_ = new TagExtractorCrawlWorker();
+    crawl_worker_ = new MusicFileMetadataExtractorCrawlWorker();
     starting_directory_ = starting_directory;
 }
 
@@ -30,11 +30,11 @@ FilesystemCrawler::~FilesystemCrawler()
     for (; repository_itr != file_system_repository_.end(); ++repository_itr)
     {
         FileMetadata* file_metadata_ptr = *repository_itr;
-        AudioFileMetadata* audio_file_metadata_ptr = dynamic_cast<AudioFileMetadata*>(file_metadata_ptr);
-        if(audio_file_metadata_ptr)
+        MusicFileMetadata* music_file_metadata_ptr = dynamic_cast<MusicFileMetadata*>(file_metadata_ptr);
+        if(music_file_metadata_ptr)
         {
-            delete audio_file_metadata_ptr;
-            audio_file_metadata_ptr = NULL;
+            delete music_file_metadata_ptr;
+            music_file_metadata_ptr = NULL;
         }
     }
 }
@@ -71,15 +71,15 @@ void FilesystemCrawler::persist_repository()
     writer.StartObject();
     writer.String("data");
     writer.StartArray();
-    // TODO: need to pass the type dynamically...this class should not know of the existance of AudioFileMetadata
+    // TODO: need to pass the type dynamically...this class should not know of the existance of MusicFileMetadata
     vector<FileMetadata*>::const_iterator repository_itr = file_system_repository_.begin();
     for (; repository_itr != file_system_repository_.end(); ++repository_itr)
     {
         FileMetadata* file_metadata_ptr = *repository_itr;
-        AudioFileMetadata* audio_file_metadata_ptr = dynamic_cast<AudioFileMetadata*>(file_metadata_ptr);
-        if(audio_file_metadata_ptr)
+        MusicFileMetadata* music_file_metadata_ptr = dynamic_cast<MusicFileMetadata*>(file_metadata_ptr);
+        if(music_file_metadata_ptr)
         {
-            audio_file_metadata_ptr->serialize(writer);
+            music_file_metadata_ptr->serialize(writer);
         }
     }
     writer.EndArray();

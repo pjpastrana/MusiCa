@@ -1,12 +1,12 @@
-#ifndef _AUDIO_FILE_METADATA_H_
-#define _AUDIO_FILE_METADATA_H_
+#ifndef _MUSIC_FILE_METADATA_H_
+#define _MUSIC_FILE_METADATA_H_
 
 #include <string>
 #include "file_metadata.hpp"
 
 using std::string;
 
-class AudioFileMetadata : public FileMetadata
+class MusicFileMetadata : public FileMetadata
 {
     public:
         string title_;
@@ -21,8 +21,8 @@ class AudioFileMetadata : public FileMetadata
         string length_in_minutes_;
         string length_in_seconds_;
 
-        AudioFileMetadata() {};
-        ~AudioFileMetadata() {};
+        MusicFileMetadata() {};
+        ~MusicFileMetadata() {};
 
         template <typename Writer>
         void serialize(Writer& writer) const 

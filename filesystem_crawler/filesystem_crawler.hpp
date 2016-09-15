@@ -6,7 +6,7 @@
 #include <vector>
 #include <boost/filesystem.hpp>
 
-#include "tag_extractor_crawl_worker.hpp"
+#include "music_file_metadata_extractor_crawl_worker.hpp"
 #include "file_metadata.hpp"
 
 using namespace std;
@@ -14,7 +14,7 @@ using namespace std;
 using boost::filesystem::recursive_directory_iterator;
 using boost::filesystem::path;
 
-
+// template<class T>
 class FilesystemCrawler
 {
     string starting_directory_;

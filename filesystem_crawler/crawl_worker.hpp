@@ -1,5 +1,5 @@
-#ifndef _CRAWLWORKER_H_
-#define _CRAWLWORKER_H_
+#ifndef _CRAWL_WORKER_H_
+#define _CRAWL_WORKER_H_
 
 #include <string>
 #include <boost/filesystem.hpp>
