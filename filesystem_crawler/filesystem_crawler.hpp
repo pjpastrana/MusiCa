@@ -6,11 +6,12 @@
 #include <vector>
 #include <boost/filesystem.hpp>
 
-#include "music_file_metadata_extractor_crawl_worker.hpp"
+#include "crawl_worker_factory.hpp"
 #include "file_metadata.hpp"
+#include "properties.hpp"
 
 using namespace std;
-// TODO: check if including namespace elements is a good practice
+
 using boost::filesystem::recursive_directory_iterator;
 using boost::filesystem::path;
 
@@ -23,7 +24,7 @@ class FilesystemCrawler
     vector<FileMetadata*> file_system_repository_;
 
     public:
-        FilesystemCrawler(string starting_directory);
+        FilesystemCrawler(Properties* properties);
         ~FilesystemCrawler();
         void crawl();
         // TODO: this method is part of the repository class to be created

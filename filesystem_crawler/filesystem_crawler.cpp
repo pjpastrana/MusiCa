@@ -7,18 +7,19 @@
 using rapidjson::StringBuffer;
 using rapidjson::PrettyWriter;
 
-void write_to_file(string file_name, string file_content)
+void utils_write_to_file(string file_name, string file_content)
 {
     std::ofstream out(file_name);
     out << file_content;
     out.close();
 }
 
-FilesystemCrawler::FilesystemCrawler(string starting_directory)
+FilesystemCrawler::FilesystemCrawler(Properties* properties)
 {
-    // TODO: dependency injection, how to do that in c++
-    crawl_worker_ = new MusicFileMetadataExtractorCrawlWorker();
-    starting_directory_ = starting_directory;
+    string crawl_worker_name = properties->get_string("crawl_workers");
+    starting_directory_ = properties->get_string("starting_directory");
+
+    crawl_worker_ = CrawlWorkerFactory::get_crawl_worker(crawl_worker_name);
 }
 
 FilesystemCrawler::~FilesystemCrawler()
@@ -85,5 +86,5 @@ void FilesystemCrawler::persist_repository()
     writer.EndArray();
     writer.EndObject();
 
-    write_to_file("music-repository.json", sb.GetString());
+    utils_write_to_file("music-repository.json", sb.GetString());
 }
