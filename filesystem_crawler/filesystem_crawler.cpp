@@ -16,52 +16,71 @@ void utils_write_to_file(string file_name, string file_content)
 
 FilesystemCrawler::FilesystemCrawler(Properties* properties)
 {
-    string crawl_worker_name = properties->get_string("crawl_workers");
+    vector<string> crawl_worker_names = properties->get_string_array("crawl_workers");
     starting_directory_ = properties->get_string("starting_directory");
 
-    crawl_worker_ = CrawlWorkerFactory::get_crawl_worker(crawl_worker_name);
+    // create workers
+    for (auto worker_name : crawl_worker_names)
+    {
+        cout << "Creating crawl_worker: " << worker_name << endl;
+        crawl_workers_.push_back(CrawlWorkerFactory::get_crawl_worker(worker_name));
+    }
 }
 
 FilesystemCrawler::~FilesystemCrawler()
 {
-    delete crawl_worker_;
-    crawl_worker_ = NULL;
+    // TODO: why is the pointer not allocated
+    // for(vector<CrawlWorker*>::iterator it = crawl_workers_.begin() ; it != crawl_workers_.end(); ++it)
+    // {
+    //     if((*it) != NULL)
+    //         delete (*it);
+    // }
 
-    vector<FileMetadata*>::const_iterator repository_itr = file_system_repository_.begin();
-    for (; repository_itr != file_system_repository_.end(); ++repository_itr)
-    {
-        FileMetadata* file_metadata_ptr = *repository_itr;
-        MusicFileMetadata* music_file_metadata_ptr = dynamic_cast<MusicFileMetadata*>(file_metadata_ptr);
-        if(music_file_metadata_ptr)
-        {
-            delete music_file_metadata_ptr;
-            music_file_metadata_ptr = NULL;
-        }
-    }
+    // vector<FileMetadata*>::const_iterator repository_itr = file_system_repository_.begin();
+    // for (; repository_itr != file_system_repository_.end(); ++repository_itr)
+    // {
+    //     FileMetadata* file_metadata_ptr = *repository_itr;
+    //     MusicFileMetadata* music_file_metadata_ptr = dynamic_cast<MusicFileMetadata*>(file_metadata_ptr);
+    //     if(music_file_metadata_ptr)
+    //     {
+    //         delete music_file_metadata_ptr;
+    //         music_file_metadata_ptr = NULL;
+    //     }
+    // }
 }
 
 void FilesystemCrawler::crawl()
 {
     // TODO: verify the directory exists, catch error if the directory does not exists
     cout << "starting_directory " << starting_directory_ << endl;
-    int items_added = 0;
+    // int items_added = 0;
     recursive_directory_iterator iter(starting_directory_);
     recursive_directory_iterator end;
     for (; iter != end; ++iter)
     {
         cout << "sending " << iter->path().string() << endl;
-        FileMetadata* file_metadata = crawl_worker_->do_something(iter->path());
+        execute_crawl_workers(iter->path());
         // TODO: move the validation to fileMetadata object
-        if(file_metadata && file_metadata->file_name_ != "")
-        {
-            cout << "File Name @ crawler --> " << file_metadata->file_name_ << endl;
-            cout << "saving in repository " << items_added++ << endl;
-            file_system_repository_.push_back(file_metadata);
-        }
+        // if(file_metadata && file_metadata->file_name_ != "")
+        // {
+        //     cout << "File Name @ crawler --> " << file_metadata->file_name_ << endl;
+        //     cout << "saving in repository " << items_added++ << endl;
+        //     file_system_repository_.push_back(file_metadata);
+        // }
     }
-    cout << "items added to repository " << items_added << endl;
-    cout << "There are " << file_system_repository_.size() << " items in repository " << endl;
-    persist_repository();
+    // cout << "items added to repository " << items_added << endl;
+    // cout << "There are " << file_system_repository_.size() << " items in repository " << endl;
+    // persist_repository();
+}
+
+FileMetadata* FilesystemCrawler::execute_crawl_workers(const path file)
+{
+    FileMetadata* file_metadata_ptr = NULL;
+    for(vector<CrawlWorker*>::iterator it = crawl_workers_.begin() ; it != crawl_workers_.end(); ++it)
+    {
+        file_metadata_ptr = (*it)->do_something( file );
+    }
+    return file_metadata_ptr;
 }
 
 void FilesystemCrawler::persist_repository()

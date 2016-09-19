@@ -3,8 +3,8 @@
 
 #include <string>
 
-// #include "crawl_worker.hpp"
 #include "music_file_metadata_extractor_crawl_worker.hpp"
+#include "audio_reader_crawl_worker.hpp"
 
 class CrawlWorkerFactory
 {

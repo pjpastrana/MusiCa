@@ -4,35 +4,18 @@
 
 using namespace std;
 
-void read_properties_file(string filename);
-
 void crawl_filesystem(Properties* properties);
 
-// class FileSystem
-// {
-//     public:
-//       string something;
-//       static FileSystem& instance(string pedro)
-//       {
-//         static FileSystem *instance = new FileSystem(pedro);
-//         return *instance;
-//       }
-
-//     private:
-//       FileSystem(string pedro) {
-//         something = pedro;
-//       }
-// };
-
-int main(int argc, char* argv[])
+int main(int argc, const char* argv[])
 {
-    // FileSystem fs = FileSystem::instance("pedro");
-    // cout << fs.something << endl;
-    // TODO: input validation
+    if(argc != 2)
+    {
+        cerr << "Invalid number of input arguments" << endl;
+        exit(1);
+    }
+
     string properties_file(argv[1]);
     Properties properties(properties_file);
-    // Properties properties = Properties::instance(properties_file);
-    // // cout << "starting_directory " << properties.get_string("starting_directory") << endl;
     crawl_filesystem(&properties);
 
     return 0;

@@ -7,9 +7,9 @@ CrawlWorkerFactory::~CrawlWorkerFactory(){}
 CrawlWorker* CrawlWorkerFactory::get_crawl_worker(string name)
 {
     CrawlWorker* crawl_worker = NULL;
-    if(name == "MusicFileMetadataExtractorCrawlWorker")
+    if(name == "AudioReaderCrawlWorker")
     {
-        crawl_worker = new MusicFileMetadataExtractorCrawlWorker();
+        crawl_worker = new AudioReaderCrawlWorker();
     }
     else
     {

@@ -1,9 +1,9 @@
 PROJECT_NAME = filesystem-crawler
 CC = g++
-CFLAGS = -c -Wall -g -std=c++11
+CFLAGS = -static -c -Wall -g -std=c++11
 INCLUDES = -I/opt/local/include -I/opt/local/include/taglib -I$(HOME)/usr/include
 LIBPATH = -L/opt/local/lib
-LIBS = -lboost_filesystem-mt -lboost_system-mt -lboost_program_options-mt -ltag
+LIBS = -lboost_filesystem-mt -lboost_system-mt -ltag -lfftw3 -lm -lsndfile
 SRC_DIR = ../
 
 
@@ -37,5 +37,5 @@ clean:
 run:
 	./$(PROJECT_NAME) properties.json
 
-memleak:
-	valgrind -v --leak-check=full ./$(PROJECT_NAME)
+check:
+	valgrind -v --track-origins=yes ./$(PROJECT_NAME) properties.json

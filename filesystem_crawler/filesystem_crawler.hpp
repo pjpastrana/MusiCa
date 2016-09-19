@@ -19,7 +19,7 @@ using boost::filesystem::path;
 class FilesystemCrawler
 {
     string starting_directory_;
-    CrawlWorker* crawl_worker_;
+    vector<CrawlWorker*> crawl_workers_;
     // TODO: move repository to its own class
     vector<FileMetadata*> file_system_repository_;
 
@@ -27,6 +27,7 @@ class FilesystemCrawler
         FilesystemCrawler(Properties* properties);
         ~FilesystemCrawler();
         void crawl();
+        FileMetadata* execute_crawl_workers(const path file);
         // TODO: this method is part of the repository class to be created
         void persist_repository();
 };
