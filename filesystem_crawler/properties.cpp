@@ -11,12 +11,6 @@ string utils_read_from_file(string filename)
     return content;
 }
 
-// Properties& Properties::instance(string json_file)
-// {
-//     static Properties* singleton_instance = new Properties(json_file);
-//     return *singleton_instance;
-// }
-
 Properties::Properties(string json_file)
 {
     string json_content = utils_read_from_file(json_file);
@@ -34,10 +28,7 @@ Properties::Properties(string json_file)
 }
 
 Properties::~Properties()
-{
-    // delete document;
-    // document = NULL;
-}
+{}
 
 bool Properties::valid_key(string key)
 {

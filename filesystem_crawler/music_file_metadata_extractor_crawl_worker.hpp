@@ -7,16 +7,16 @@
 
 #include "crawl_worker.hpp"
 #include "music_file_metadata.hpp"
+#include "properties.hpp"
 
 class MusicFileMetadataExtractorCrawlWorker : public CrawlWorker
 {
-
-    MusicFileMetadata* music_file_metadata_;
+    shared_ptr<MusicFileMetadata> music_file_metadata_;
 
     public:
-        MusicFileMetadataExtractorCrawlWorker();
+        MusicFileMetadataExtractorCrawlWorker(Properties* properties);
         ~MusicFileMetadataExtractorCrawlWorker();
-        FileMetadata* do_something (const path file);
+        shared_ptr<FileMetadata> do_something (const path file);
         bool is_valid_file(const path file);
         void extract_tags_from_file(const path file);
 };

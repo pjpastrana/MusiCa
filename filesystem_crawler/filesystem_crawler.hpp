@@ -15,19 +15,17 @@ using namespace std;
 using boost::filesystem::recursive_directory_iterator;
 using boost::filesystem::path;
 
-// template<class T>
 class FilesystemCrawler
 {
     string starting_directory_;
-    vector<CrawlWorker*> crawl_workers_;
-    // TODO: move repository to its own class
+    vector< shared_ptr<CrawlWorker> > crawl_workers_;
     vector<FileMetadata*> file_system_repository_;
 
     public:
         FilesystemCrawler(Properties* properties);
         ~FilesystemCrawler();
         void crawl();
-        FileMetadata* execute_crawl_workers(const path file);
+        shared_ptr<FileMetadata> execute_crawl_workers(const path file);
         // TODO: this method is part of the repository class to be created
         void persist_repository();
 };

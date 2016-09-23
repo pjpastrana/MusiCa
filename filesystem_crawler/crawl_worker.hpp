@@ -16,7 +16,7 @@ class CrawlWorker
 {
     public:
         virtual ~CrawlWorker(){};
-        virtual FileMetadata* do_something (const path file) = 0;
+        virtual shared_ptr<FileMetadata> do_something (const path file) = 0;
         virtual bool is_valid_file(const path file) = 0;
 };
 

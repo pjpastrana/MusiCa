@@ -11,7 +11,6 @@ using rapidjson::Document;
 
 class Properties
 {
-    // TODO: document does not have a copy constructor. Is preventing me having a static instance method to create a singleton
     Document document;
 
     public:
@@ -28,17 +27,6 @@ class Properties
         vector<string> get_string_array(string key);
         vector<int> get_int_array(string key);
         vector<double> get_double_array(string key);
-
-        // static Properties& instance() { return instance_; }
-        
-        // NOTE: C++11 mandates that the initializer for a local static variable is only run once, even in the presence of concurrency.
-        // TODO: how to do singleton
-        // static Properties& instance(string json_file);
-        // {
-        //     static Properties* singleton_instance = new Properties(json_file);
-        //     return *singleton_instance;
-        // }
-
 };
 
 #endif

@@ -1,25 +1,22 @@
 #include "music_file_metadata_extractor_crawl_worker.hpp"
 
-MusicFileMetadataExtractorCrawlWorker::MusicFileMetadataExtractorCrawlWorker()
+MusicFileMetadataExtractorCrawlWorker::MusicFileMetadataExtractorCrawlWorker(Properties* properties)
 {
     music_file_metadata_ = NULL;
 }
 
 MusicFileMetadataExtractorCrawlWorker::~MusicFileMetadataExtractorCrawlWorker()
-{
-    // delete music_file_metadata_;
-    // music_file_metadata_ = NULL;
-}
+{}
 
-FileMetadata* MusicFileMetadataExtractorCrawlWorker::do_something(const path file)
+shared_ptr<FileMetadata> MusicFileMetadataExtractorCrawlWorker::do_something(const path file)
 {
-    FileMetadata* file_metadata = NULL;
+    shared_ptr<FileMetadata> file_metadata = NULL;
     if(exists(file) && is_regular_file(file) && is_valid_file(file))
     {
         // only working with user/data files (i.e. not hidden or system files)
-        cout << "Doing something to item " << file.string() << endl;
+        cout << "MusicFileMetadataExtractorCrawlWorker Doing something to item " << file.string() << endl;
         extract_tags_from_file(file);
-        file_metadata = dynamic_cast<FileMetadata*>(music_file_metadata_);
+        file_metadata = dynamic_pointer_cast<FileMetadata>(music_file_metadata_);
     }
     return file_metadata;
 }
@@ -39,8 +36,7 @@ void MusicFileMetadataExtractorCrawlWorker::extract_tags_from_file(const path fi
 
     if(!file.isNull() && file.tag())
     {
-        // TODO: verify this
-        music_file_metadata_ = new MusicFileMetadata();
+        music_file_metadata_ = make_shared<MusicFileMetadata>();
 
         TagLib::Tag *tag = file.tag();
         music_file_metadata_->file_name_ = file_path.filename().string();
@@ -67,5 +63,6 @@ void MusicFileMetadataExtractorCrawlWorker::extract_tags_from_file(const path fi
             music_file_metadata_->length_in_minutes_ = to_string(minutes);
             music_file_metadata_->length_in_seconds_ = to_string(seconds);
         }
+
     }
 }

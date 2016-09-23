@@ -4,16 +4,16 @@ CrawlWorkerFactory::CrawlWorkerFactory(){}
 
 CrawlWorkerFactory::~CrawlWorkerFactory(){}
 
-CrawlWorker* CrawlWorkerFactory::get_crawl_worker(string name)
+shared_ptr<CrawlWorker> CrawlWorkerFactory::get_crawl_worker(string name, Properties* properties)
 {
-    CrawlWorker* crawl_worker = NULL;
+    shared_ptr<CrawlWorker> crawl_worker = NULL;
     if(name == "AudioReaderCrawlWorker")
     {
-        crawl_worker = new AudioReaderCrawlWorker();
+        crawl_worker = make_shared<AudioReaderCrawlWorker>(properties);
     }
     else
     {
-        crawl_worker = new MusicFileMetadataExtractorCrawlWorker();
+        crawl_worker = make_shared<MusicFileMetadataExtractorCrawlWorker>(properties);
     }
 
     return crawl_worker;

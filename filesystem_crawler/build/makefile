@@ -38,4 +38,4 @@ run:
 	./$(PROJECT_NAME) properties.json
 
 check:
-	valgrind -v --track-origins=yes ./$(PROJECT_NAME) properties.json
+	valgrind -v --track-origins=yes --leak-check=full ./$(PROJECT_NAME) properties.json

@@ -1,32 +1,43 @@
 #include "audio_reader_crawl_worker.hpp"
 
-AudioReaderCrawlWorker::AudioReaderCrawlWorker()
-{}
+#define ARRAY_LEN(x) ((int) (sizeof (x) / sizeof (x [0])))
+
+AudioReaderCrawlWorker::AudioReaderCrawlWorker(Properties* properties)
+{
+    audio_file_metadata_ = NULL;
+    audio_buffer_size_ = properties->get_int("audio_buffer_size");
+}
 
 AudioReaderCrawlWorker::~AudioReaderCrawlWorker()
 {}
 
-FileMetadata* AudioReaderCrawlWorker::do_something(const path file)
+shared_ptr<FileMetadata> AudioReaderCrawlWorker::do_something(const path file)
 {
-    cout << "AudioReaderCrawlWorker doing something with " << file.string() << endl;
-    read_audio_file(file);
-    process_audio_file();
-    return NULL;
+    shared_ptr<FileMetadata> file_metadata = NULL;
+    if(exists(file) && is_regular_file(file) && is_valid_file(file))
+    {
+        // only working with user/data files (i.e. not hidden or system files)
+        cout << "AudioReaderCrawlWorker doing something with " << file.string() << endl;
+        read_audio_file(file);
+        process_audio_file();
+    }
+    return file_metadata;
 }
 
 bool AudioReaderCrawlWorker::is_valid_file(const path file)
 {
-    return true;
+    bool is_valid = false;
+    // TODO: refactor. create some sort of class or enum with the vaid types
+    if(file.extension() == ".wav")
+        is_valid = true;
+    return is_valid;
 }
-
-const int AUDIO_BUFFER_SIZE = 1024;
-#define ARRAY_LEN(x)    ((int) (sizeof (x) / sizeof (x [0])))
 
 void AudioReaderCrawlWorker::read_audio_file(const path file)
 {
     SNDFILE* infile = NULL;
     SF_INFO sfinfo = {0,0,0,0,0,0};
-    double audio_data_buffer[AUDIO_BUFFER_SIZE];
+    double audio_data_buffer[audio_buffer_size_];
     sf_count_t num_samples_read = 0;
     sf_count_t num_total_samples_read = 0;
 

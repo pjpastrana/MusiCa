@@ -23,31 +23,12 @@ FilesystemCrawler::FilesystemCrawler(Properties* properties)
     for (auto worker_name : crawl_worker_names)
     {
         cout << "Creating crawl_worker: " << worker_name << endl;
-        crawl_workers_.push_back(CrawlWorkerFactory::get_crawl_worker(worker_name));
+        crawl_workers_.push_back(CrawlWorkerFactory::get_crawl_worker(worker_name, properties));
     }
 }
 
 FilesystemCrawler::~FilesystemCrawler()
-{
-    // TODO: why is the pointer not allocated
-    // for(vector<CrawlWorker*>::iterator it = crawl_workers_.begin() ; it != crawl_workers_.end(); ++it)
-    // {
-    //     if((*it) != NULL)
-    //         delete (*it);
-    // }
-
-    // vector<FileMetadata*>::const_iterator repository_itr = file_system_repository_.begin();
-    // for (; repository_itr != file_system_repository_.end(); ++repository_itr)
-    // {
-    //     FileMetadata* file_metadata_ptr = *repository_itr;
-    //     MusicFileMetadata* music_file_metadata_ptr = dynamic_cast<MusicFileMetadata*>(file_metadata_ptr);
-    //     if(music_file_metadata_ptr)
-    //     {
-    //         delete music_file_metadata_ptr;
-    //         music_file_metadata_ptr = NULL;
-    //     }
-    // }
-}
+{}
 
 void FilesystemCrawler::crawl()
 {
@@ -73,10 +54,10 @@ void FilesystemCrawler::crawl()
     // persist_repository();
 }
 
-FileMetadata* FilesystemCrawler::execute_crawl_workers(const path file)
+shared_ptr<FileMetadata> FilesystemCrawler::execute_crawl_workers(const path file)
 {
-    FileMetadata* file_metadata_ptr = NULL;
-    for(vector<CrawlWorker*>::iterator it = crawl_workers_.begin() ; it != crawl_workers_.end(); ++it)
+    shared_ptr<FileMetadata> file_metadata_ptr = NULL;
+    for(vector< shared_ptr<CrawlWorker> >::iterator it = crawl_workers_.begin() ; it != crawl_workers_.end(); ++it)
     {
         file_metadata_ptr = (*it)->do_something( file );
     }
