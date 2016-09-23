@@ -3,16 +3,16 @@
 
 #include <fftw3.h>
 #include <sndfile.h>
+#include <list>
 
 #include "crawl_worker.hpp"
 #include "file_metadata.hpp"
 
 // TODO: would become a generic class for reading different audio files
-
 class AudioReaderCrawlWorker : public CrawlWorker
 {
     FileMetadata* audio_file_metadata_;
-    double* audio_data_;
+    list<double> audio_data_;
 
     public:
         AudioReaderCrawlWorker();

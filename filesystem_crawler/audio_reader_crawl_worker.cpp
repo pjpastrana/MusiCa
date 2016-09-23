@@ -4,10 +4,7 @@ AudioReaderCrawlWorker::AudioReaderCrawlWorker()
 {}
 
 AudioReaderCrawlWorker::~AudioReaderCrawlWorker()
-{
-    if(audio_data_ != NULL)
-        delete audio_data_;
-}
+{}
 
 FileMetadata* AudioReaderCrawlWorker::do_something(const path file)
 {
@@ -28,7 +25,7 @@ const int AUDIO_BUFFER_SIZE = 1024;
 void AudioReaderCrawlWorker::read_audio_file(const path file)
 {
     SNDFILE* infile = NULL;
-    SF_INFO sfinfo;
+    SF_INFO sfinfo = {0,0,0,0,0,0};
     double audio_data_buffer[AUDIO_BUFFER_SIZE];
     sf_count_t num_samples_read = 0;
     sf_count_t num_total_samples_read = 0;
@@ -42,14 +39,16 @@ void AudioReaderCrawlWorker::read_audio_file(const path file)
         // TODO: how to handle errors
         exit(1);
     }
-
-    // TODO: copy buffer content into propery
     do
     {
         num_samples_read = sf_read_double (infile, audio_data_buffer, ARRAY_LEN (audio_data_buffer) );
+        // add buffered samples to container
+        for(int i = 0; i < num_samples_read; ++i)
+            audio_data_.push_back(audio_data_buffer[i]);
         num_total_samples_read += num_samples_read;
     } while ( num_samples_read > 0);
     sf_close(infile);
+
     cout << "num_total_samples_read " << num_total_samples_read << endl;
 }
 
