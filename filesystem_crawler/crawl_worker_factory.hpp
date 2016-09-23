@@ -12,7 +12,6 @@ class CrawlWorkerFactory
     CrawlWorkerFactory();
     public:
         ~CrawlWorkerFactory();
-        // static CrawlWorker* get_crawl_worker(std::string name, Properties* properties);
         static shared_ptr<CrawlWorker> get_crawl_worker(std::string name, Properties* properties);
 
 };
