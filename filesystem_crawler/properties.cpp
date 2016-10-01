@@ -1,19 +1,9 @@
-#include <fstream>
 #include "properties.hpp"
-
-// TODO: move this to utils headers
-string utils_read_from_file(string filename)
-{
-    std::ifstream ifs(filename);
-    std::string content;
-    content.assign( (std::istreambuf_iterator<char>(ifs) ),
-                  ( std::istreambuf_iterator<char>()) );
-    return content;
-}
+#include "utils.hpp"
 
 Properties::Properties(string json_file)
 {
-    string json_content = utils_read_from_file(json_file);
+    string json_content = utils::read_from_file(json_file);
     document.Parse(json_content.c_str());
     if(document.Parse(json_content.c_str()).HasParseError())
     {

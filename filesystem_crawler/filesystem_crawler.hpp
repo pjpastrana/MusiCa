@@ -19,15 +19,12 @@ class FilesystemCrawler
 {
     string starting_directory_;
     vector< shared_ptr<CrawlWorker> > crawl_workers_;
-    vector<FileMetadata*> file_system_repository_;
 
     public:
         FilesystemCrawler(Properties* properties);
         ~FilesystemCrawler();
         void crawl();
         shared_ptr<FileMetadata> execute_crawl_workers(const path file);
-        // TODO: this method is part of the repository class to be created
-        void persist_repository();
 };
 
 

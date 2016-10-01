@@ -8,6 +8,7 @@
 #include "crawl_worker.hpp"
 #include "file_metadata.hpp"
 #include "properties.hpp"
+#include "fft_processor.hpp"
 
 // TODO: would become a generic class for reading different audio files
 class AudioReaderCrawlWorker : public CrawlWorker
@@ -15,6 +16,7 @@ class AudioReaderCrawlWorker : public CrawlWorker
     shared_ptr<FileMetadata> audio_file_metadata_;
     list<double> audio_data_;
     int audio_buffer_size_;
+    FFTProcessor fft_processor;
 
     public:
         AudioReaderCrawlWorker(Properties* properties);

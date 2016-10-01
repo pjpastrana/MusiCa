@@ -65,5 +65,6 @@ void AudioReaderCrawlWorker::read_audio_file(const path file)
 
 void AudioReaderCrawlWorker::process_audio_file()
 {
-
+    vector<double> signal;
+    fft_processor.transform(signal);
 }

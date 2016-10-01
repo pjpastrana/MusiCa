@@ -9,8 +9,8 @@ SRC_DIR = ../
 
 all: $(PROJECT_NAME)
 
-$(PROJECT_NAME):  main.o filesystem_crawler.o music_file_metadata_extractor_crawl_worker.o audio_reader_crawl_worker.o properties.o crawl_worker_factory.o
-	$(CC) main.o filesystem_crawler.o music_file_metadata_extractor_crawl_worker.o audio_reader_crawl_worker.o properties.o crawl_worker_factory.o -o $(PROJECT_NAME) $(LIBPATH) $(LIBS)
+$(PROJECT_NAME):  main.o filesystem_crawler.o music_file_metadata_extractor_crawl_worker.o audio_reader_crawl_worker.o properties.o crawl_worker_factory.o fft_processor.o
+	$(CC) main.o filesystem_crawler.o music_file_metadata_extractor_crawl_worker.o audio_reader_crawl_worker.o properties.o crawl_worker_factory.o fft_processor.o -o $(PROJECT_NAME) $(LIBPATH) $(LIBS)
     
 main.o: $(SRC_DIR)main.cpp
 	$(CC) $(CFLAGS) $(INCLUDES) $(SRC_DIR)main.cpp
@@ -29,6 +29,9 @@ properties.o: $(SRC_DIR)properties.cpp
 
 crawl_worker_factory.o: $(SRC_DIR)crawl_worker_factory.cpp
 	$(CC) $(CFLAGS) $(INCLUDES) $(SRC_DIR)crawl_worker_factory.cpp
+
+fft_processor.o: $(SRC_DIR)fft_processor.cpp
+	$(CC) $(CFLAGS) $(INCLUDES) $(SRC_DIR)fft_processor.cpp
 
 clean:
 	rm -rf *.o $(PROJECT_NAME) *.gch* *~ *.dSYM
