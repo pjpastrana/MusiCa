@@ -1,9 +1,8 @@
 #ifndef _AUDIO_READER_CRAWL_WORKER_H_
 #define _AUDIO_READER_CRAWL_WORKER_H_
 
-#include <fftw3.h>
 #include <sndfile.h>
-#include <list>
+#include <vector>
 
 #include "crawl_worker.hpp"
 #include "file_metadata.hpp"
@@ -14,7 +13,7 @@
 class AudioReaderCrawlWorker : public CrawlWorker
 {
     shared_ptr<FileMetadata> audio_file_metadata_;
-    list<double> audio_data_;
+    vector<double> audio_data_;
     int audio_buffer_size_;
     FFTProcessor fft_processor;
 

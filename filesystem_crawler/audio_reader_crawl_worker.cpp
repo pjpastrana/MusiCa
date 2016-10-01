@@ -53,6 +53,8 @@ void AudioReaderCrawlWorker::read_audio_file(const path file)
     do
     {
         num_samples_read = sf_read_double (infile, audio_data_buffer, ARRAY_LEN (audio_data_buffer) );
+        // TODO: maybe resize vector by num_samples_read 
+        //       for now defaulat doesnt to affect performance
         // add buffered samples to container
         for(int i = 0; i < num_samples_read; ++i)
             audio_data_.push_back(audio_data_buffer[i]);
@@ -65,6 +67,5 @@ void AudioReaderCrawlWorker::read_audio_file(const path file)
 
 void AudioReaderCrawlWorker::process_audio_file()
 {
-    vector<double> signal;
-    fft_processor.transform(signal);
+    fft_processor.transform(audio_data_);
 }
