@@ -7,6 +7,7 @@
 #include <boost/filesystem.hpp>
 
 #include "file_metadata.hpp"
+#include "storage_manager.hpp"
 
 using namespace std;
 using boost::filesystem::path;
@@ -14,10 +15,14 @@ using boost::filesystem::path;
 // abstract class
 class CrawlWorker 
 {
+    protected: 
+        string repository_;
+
     public:
         virtual ~CrawlWorker(){};
         virtual shared_ptr<FileMetadata> do_something (const path file) = 0;
         virtual bool is_valid_file(const path file) = 0;
+        virtual void persist_metadata(){};
 };
 
 #endif

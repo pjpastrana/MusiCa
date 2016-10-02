@@ -2,8 +2,8 @@ PROJECT_NAME = filesystem-crawler
 CC = g++
 CFLAGS = -static -c -Wall -g -std=c++11
 INCLUDES = -I/opt/local/include -I/opt/local/include/taglib -I$(HOME)/usr/include
-LIBPATH = -L/opt/local/lib
-LIBS = -lboost_filesystem-mt -lboost_system-mt -ltag -lfftw3 -lm -lsndfile
+LIBPATH = -L/opt/local/lib -L$(HOME)/usr/lib
+LIBS = -lboost_filesystem-mt -lboost_system-mt -ltag -lfftw3 -lm -lsndfile -lsqlite3 -lSQLiteCpp
 SRC_DIR = ../
 
 

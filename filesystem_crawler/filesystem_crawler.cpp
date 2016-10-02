@@ -1,7 +1,6 @@
 #include "filesystem_crawler.hpp"
 #include "music_file_metadata.hpp"
 
-#include <rapidjson/prettywriter.h>
 #include <fstream>
 
 using rapidjson::StringBuffer;

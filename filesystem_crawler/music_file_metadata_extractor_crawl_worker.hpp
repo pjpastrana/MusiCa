@@ -19,6 +19,7 @@ class MusicFileMetadataExtractorCrawlWorker : public CrawlWorker
         shared_ptr<FileMetadata> do_something (const path file);
         bool is_valid_file(const path file);
         void extract_tags_from_file(const path file);
+        void persist_metadata();
 };
 
 #endif

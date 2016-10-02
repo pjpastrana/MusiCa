@@ -3,6 +3,7 @@
 MusicFileMetadataExtractorCrawlWorker::MusicFileMetadataExtractorCrawlWorker(Properties* properties)
 {
     music_file_metadata_ = NULL;
+    repository_ = properties->get_string("database");
 }
 
 MusicFileMetadataExtractorCrawlWorker::~MusicFileMetadataExtractorCrawlWorker()
@@ -16,6 +17,7 @@ shared_ptr<FileMetadata> MusicFileMetadataExtractorCrawlWorker::do_something(con
         // only working with user/data files (i.e. not hidden or system files)
         cout << "MusicFileMetadataExtractorCrawlWorker Doing something to item " << file.string() << endl;
         extract_tags_from_file(file);
+        persist_metadata();
         file_metadata = dynamic_pointer_cast<FileMetadata>(music_file_metadata_);
     }
     return file_metadata;
@@ -63,6 +65,30 @@ void MusicFileMetadataExtractorCrawlWorker::extract_tags_from_file(const path fi
             music_file_metadata_->length_in_minutes_ = to_string(minutes);
             music_file_metadata_->length_in_seconds_ = to_string(seconds);
         }
-
     }
 }
+
+void MusicFileMetadataExtractorCrawlWorker::persist_metadata()
+{
+    try
+    {
+        SQLite::Database database(repository_, SQLite::OPEN_READWRITE);
+        SQLite::Transaction transaction(database);
+        SQLite::Statement query(database, "INSERT INTO music_file_metadata VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        query.bind(1, music_file_metadata_->file_name_);
+        query.bind(2, music_file_metadata_->file_location_);
+        query.bind(3, music_file_metadata_->title_);
+        query.bind(4, music_file_metadata_->artist_);
+        query.bind(5, music_file_metadata_->album_);
+        query.bind(6, music_file_metadata_->year_);
+        query.bind(7, music_file_metadata_->genre_);
+        query.bind(8, music_file_metadata_->bitrate_);
+        query.bind(9, music_file_metadata_->sample_rate_);
+        query.exec();
+        transaction.commit();
+    }
+    catch (std::exception& e)
+    {
+        std::cout << "exception: " << e.what() << std::endl;
+    }
+};
