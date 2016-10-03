@@ -35,12 +35,10 @@ void FilesystemCrawler::crawl()
     }
 }
 
-shared_ptr<FileMetadata> FilesystemCrawler::execute_crawl_workers(const path file)
+void FilesystemCrawler::execute_crawl_workers(const path file)
 {
-    shared_ptr<FileMetadata> file_metadata_ptr = NULL;
     for(vector< shared_ptr<CrawlWorker> >::iterator it = crawl_workers_.begin() ; it != crawl_workers_.end(); ++it)
     {
-        file_metadata_ptr = (*it)->do_something( file );
+        (*it)->do_something( file );
     }
-    return file_metadata_ptr;
 }

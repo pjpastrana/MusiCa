@@ -24,7 +24,7 @@ class FilesystemCrawler
         FilesystemCrawler(Properties* properties);
         ~FilesystemCrawler();
         void crawl();
-        shared_ptr<FileMetadata> execute_crawl_workers(const path file);
+        void execute_crawl_workers(const path file);
 };
 
 

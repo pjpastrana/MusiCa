@@ -9,18 +9,15 @@ MusicFileMetadataExtractorCrawlWorker::MusicFileMetadataExtractorCrawlWorker(Pro
 MusicFileMetadataExtractorCrawlWorker::~MusicFileMetadataExtractorCrawlWorker()
 {}
 
-shared_ptr<FileMetadata> MusicFileMetadataExtractorCrawlWorker::do_something(const path file)
+void MusicFileMetadataExtractorCrawlWorker::do_something(const path file)
 {
-    shared_ptr<FileMetadata> file_metadata = NULL;
     if(exists(file) && is_regular_file(file) && is_valid_file(file))
     {
         // only working with user/data files (i.e. not hidden or system files)
         cout << "MusicFileMetadataExtractorCrawlWorker Doing something to item " << file.string() << endl;
         extract_tags_from_file(file);
         persist_metadata();
-        file_metadata = dynamic_pointer_cast<FileMetadata>(music_file_metadata_);
     }
-    return file_metadata;
 }
 
 bool MusicFileMetadataExtractorCrawlWorker::is_valid_file(const path file_path)
