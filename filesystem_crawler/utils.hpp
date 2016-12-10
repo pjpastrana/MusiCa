@@ -5,14 +5,15 @@
 
 namespace utils 
 {
-void write_to_file(string file_name, string file_content)
+
+inline void write_to_file(std::string file_name, std::string file_content)
 {
     std::ofstream out(file_name);
     out << file_content;
     out.close();
 }
 
-string read_from_file(string filename)
+inline std::string read_from_file(std::string filename)
 {
     std::ifstream ifs(filename);
     std::string content;
@@ -21,10 +22,17 @@ string read_from_file(string filename)
     return content;
 }
 
-
-// print_list
-    // for (std::list<double>::iterator it=audio_data_.begin(); it != audio_data_.end(); ++it)
-    //     std::cout << ' ' << *it;
+// TODO: this method should be generic to different datatypes
+inline std::vector<double> extract_col_from_vector_matrix(std::vector< std::vector<double> > vector_matrix, int column_idx)
+{
+    std::vector<double> column_of_interest(vector_matrix.size(), 0.0);
+    int i = 0;
+    for(auto row : vector_matrix)
+    {
+        column_of_interest.at(i++) = row[column_idx];
+    }
+    return column_of_interest;
+}
 
 }
 

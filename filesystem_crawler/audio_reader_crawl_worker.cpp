@@ -13,7 +13,7 @@ void AudioReaderCrawlWorker::do_something(const path file)
     if(exists(file) && is_regular_file(file) && is_valid_file(file))
     {
         // only working with user/data files (i.e. not hidden or system files)
-        cout << "AudioReaderCrawlWorker doing something with " << file.string() << endl;
+        cout << "INFO@AudioReaderCrawlWorker.do_something: " << file.string() << endl;
         audio_filename_ = file.filename().string();
         read_audio_file(file);
         persist_metadata();
@@ -36,12 +36,12 @@ void AudioReaderCrawlWorker::read_audio_file(const path file)
     sf_count_t num_samples_read = 0;
     sf_count_t num_total_samples_read = 0;
 
-    cout << "reading audio file " << endl;
+    cout << "INFO@AudioReaderCrawlWorker.read_audio_file: reading audio file " << endl;
 
     infile = sf_open(file.c_str(), SFM_READ, &sfinfo);
     if(!infile)
     {
-        cerr << "ERROR@audio_reader_crawl_worker.read_audio_file: Unable to open input file " << file.string() << endl;
+        cerr << "ERROR@AudioReaderCrawlWorker.read_audio_file: Unable to open input file " << file.string() << endl;
         // TODO: how to handle errors
         return;
     }
@@ -97,8 +97,8 @@ void AudioReaderCrawlWorker::process_audio(int num_samples_read, int total_sampl
             double magnitude = imabs(fft_transform[i]) / 2.0;
             
             vector<double> triplet;
-            triplet.push_back(time_in_seconds);
             triplet.push_back(frequency);
+            triplet.push_back(time_in_seconds);
             triplet.push_back(magnitude);
             audio_file_spectrogram_values_.push_back(triplet);
         }
@@ -108,13 +108,24 @@ void AudioReaderCrawlWorker::process_audio(int num_samples_read, int total_sampl
 void AudioReaderCrawlWorker::persist_metadata()
 {
     cout << "INFO@AudioReaderCrawlWorker.persist_metadata: Persisting spectrogram values" << endl;
-    ofstream out(audio_filename_+".csv");
-    out << "time_in_seconds, frequency, magnitude" << endl;
-    for(auto spectrogram_value_triplet : audio_file_spectrogram_values_) 
+    
+    ofstream out;
+    out.open(audio_filename_+".tsv");
+    double time_change_mark = audio_file_spectrogram_values_[0][1];
+    out << "# frequency\ttime_in_seconds\tmagnitude" << endl;
+    
+    for(auto spectrogram_value_triplet : audio_file_spectrogram_values_)
     {
-        out << spectrogram_value_triplet[0] << ", " 
-            << spectrogram_value_triplet[1] << ", " 
+        if(spectrogram_value_triplet[1] > time_change_mark)
+        {
+            out << endl;
+            time_change_mark = spectrogram_value_triplet[1];
+        }
+
+        out << spectrogram_value_triplet[0] << "\t" 
+            << spectrogram_value_triplet[1] << "\t" 
             << spectrogram_value_triplet[2] << endl;
     }
     out.close();
 }
+

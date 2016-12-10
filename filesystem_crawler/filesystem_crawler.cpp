@@ -14,7 +14,7 @@ FilesystemCrawler::FilesystemCrawler(Properties* properties)
     // create workers
     for (auto worker_name : crawl_worker_names)
     {
-        cout << "Creating crawl_worker: " << worker_name << endl;
+        cout << "INFO@FilesystemCrawler: Creating crawl_worker: " << worker_name << endl;
         crawl_workers_.push_back(CrawlWorkerFactory::get_crawl_worker(worker_name, properties));
     }
 }
@@ -25,12 +25,11 @@ FilesystemCrawler::~FilesystemCrawler()
 void FilesystemCrawler::crawl()
 {
     // TODO: verify the directory exists, catch error if the directory does not exists
-    cout << "starting_directory " << starting_directory_ << endl;
+    cout << "INFO@FilesystemCrawler.crawl: starting_directory " << starting_directory_ << endl;
     recursive_directory_iterator iter(starting_directory_);
     recursive_directory_iterator end;
     for (; iter != end; ++iter)
     {
-        cout << "sending " << iter->path().string() << endl;
         execute_crawl_workers(iter->path());
     }
 }

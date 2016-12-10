@@ -11,7 +11,6 @@
 #include "properties.hpp"
 #include "fft_processor.hpp"
 
-// TODO: would become a generic class for reading different audio files
 class AudioReaderCrawlWorker : public CrawlWorker
 {
     // TODO: I dont like having the filename as a member variable

@@ -14,7 +14,7 @@ void MusicFileMetadataExtractorCrawlWorker::do_something(const path file)
     if(exists(file) && is_regular_file(file) && is_valid_file(file))
     {
         // only working with user/data files (i.e. not hidden or system files)
-        cout << "MusicFileMetadataExtractorCrawlWorker Doing something to item " << file.string() << endl;
+        cout << "INFO@MusicFileMetadataExtractorCrawlWorker.do_something: " << file.string() << endl;
         extract_tags_from_file(file);
         persist_metadata();
     }

@@ -12,9 +12,9 @@ class FFTProcessor
 {
     int window_size_;
     int signal_num_channels_;
-    double* sample_input_signal_;
-    fftw_complex* sample_output_transform_;
-    fftw_plan sample_plan_;
+    double* input_signal_;
+    fftw_complex* output_transform_;
+    fftw_plan plan_;
 
     public:
         FFTProcessor();

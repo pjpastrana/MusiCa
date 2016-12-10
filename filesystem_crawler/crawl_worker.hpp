@@ -22,6 +22,7 @@ class CrawlWorker
         virtual ~CrawlWorker(){};
         virtual void do_something (const path file) = 0;
         virtual bool is_valid_file(const path file) = 0;
+        // TODO: virtual void persist_metadata(void*){};
         virtual void persist_metadata(){};
 };
 
