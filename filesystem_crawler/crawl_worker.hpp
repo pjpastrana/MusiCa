@@ -5,24 +5,25 @@
 #include <iomanip>
 #include <string>
 #include <boost/filesystem.hpp>
+#include <rapidjson/prettywriter.h>
 
 #include "file_metadata.hpp"
-#include "storage_manager.hpp"
 
 using namespace std;
 using boost::filesystem::path;
+using rapidjson::StringBuffer;
+using rapidjson::PrettyWriter;
 
 // abstract class
 class CrawlWorker 
 {
-    protected: 
-        string repository_;
-
+    protected:
+        string persistence_directory_;
+        
     public:
         virtual ~CrawlWorker(){};
         virtual void do_something (const path file) = 0;
         virtual bool is_valid_file(const path file) = 0;
-        // TODO: virtual void persist_metadata(void*){};
         virtual void persist_metadata(){};
 };
 

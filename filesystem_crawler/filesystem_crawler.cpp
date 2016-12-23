@@ -1,10 +1,4 @@
 #include "filesystem_crawler.hpp"
-#include "music_file_metadata.hpp"
-
-#include <fstream>
-
-using rapidjson::StringBuffer;
-using rapidjson::PrettyWriter;
 
 FilesystemCrawler::FilesystemCrawler(Properties* properties)
 {
@@ -24,7 +18,6 @@ FilesystemCrawler::~FilesystemCrawler()
 
 void FilesystemCrawler::crawl()
 {
-    // TODO: verify the directory exists, catch error if the directory does not exists
     cout << "INFO@FilesystemCrawler.crawl: starting_directory " << starting_directory_ << endl;
     recursive_directory_iterator iter(starting_directory_);
     recursive_directory_iterator end;

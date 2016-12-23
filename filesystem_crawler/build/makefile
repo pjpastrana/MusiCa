@@ -3,14 +3,14 @@ CC = g++
 CFLAGS = -static -c -Wall -g -std=c++11
 INCLUDES = -I/opt/local/include -isystem /opt/local/include/taglib -I$(HOME)/usr/include
 LIBPATH = -L/opt/local/lib -L$(HOME)/usr/lib
-LIBS = -lboost_filesystem-mt -lboost_system-mt -ltag -lfftw3 -lm -lsndfile -lsqlite3 -lSQLiteCpp -lopencv_core -lopencv_highgui -lopencv_imgcodecs
+LIBS = -lboost_filesystem-mt -lboost_system-mt -ltag -lfftw3 -lm -lsndfile  -lopencv_core -lopencv_highgui -lopencv_imgcodecs
 SRC_DIR = ../
 
 all: $(PROJECT_NAME)
 
 $(PROJECT_NAME):  main.o filesystem_crawler.o music_file_metadata_extractor_crawl_worker.o audio_reader_crawl_worker.o properties.o crawl_worker_factory.o fft_processor.o
 	$(CC) main.o filesystem_crawler.o music_file_metadata_extractor_crawl_worker.o audio_reader_crawl_worker.o properties.o crawl_worker_factory.o fft_processor.o -o $(PROJECT_NAME) $(LIBPATH) $(LIBS)
-    
+
 main.o: $(SRC_DIR)main.cpp
 	$(CC) $(CFLAGS) $(INCLUDES) $(SRC_DIR)main.cpp
 

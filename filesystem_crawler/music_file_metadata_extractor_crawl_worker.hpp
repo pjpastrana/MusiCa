@@ -8,6 +8,7 @@
 #include "crawl_worker.hpp"
 #include "music_file_metadata.hpp"
 #include "properties.hpp"
+#include "utils.hpp"
 
 class MusicFileMetadataExtractorCrawlWorker : public CrawlWorker
 {

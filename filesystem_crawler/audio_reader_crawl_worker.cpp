@@ -3,6 +3,7 @@
 AudioReaderCrawlWorker::AudioReaderCrawlWorker(Properties* properties)
 {
     audio_buffer_size_ = properties->get_int("audio_buffer_size");
+    persistence_directory_ = properties->get_string("persistence_directory");
 }
 
 AudioReaderCrawlWorker::~AudioReaderCrawlWorker()
@@ -23,8 +24,8 @@ void AudioReaderCrawlWorker::do_something(const path file)
 bool AudioReaderCrawlWorker::is_valid_file(const path file)
 {
     bool is_valid = false;
-    // TODO: refactor. create some sort of class or enum with the vaid types
-    if(file.extension() == ".wav")
+    // TODO: refactor. create some sort of class or enum with the valid types
+    if(file.extension() == ".flac")
         is_valid = true;
     return is_valid;
 }
@@ -42,7 +43,6 @@ void AudioReaderCrawlWorker::read_audio_file(const path file)
     if(!infile)
     {
         cerr << "ERROR@AudioReaderCrawlWorker.read_audio_file: Unable to open input file " << file.string() << endl;
-        // TODO: how to handle errors
         return;
     }
     fft_processor_.set_args(audio_buffer_size_, sfinfo.channels);//, (double)sfinfo.samplerate);
@@ -110,7 +110,7 @@ void AudioReaderCrawlWorker::persist_metadata()
     cout << "INFO@AudioReaderCrawlWorker.persist_metadata: Persisting spectrogram values" << endl;
     
     ofstream out;
-    out.open(audio_filename_+".tsv");
+    out.open(persistence_directory_+"/"+audio_filename_+".tsv");
     double time_change_mark = audio_file_spectrogram_values_[0][1];
     out << "# frequency\ttime_in_seconds\tmagnitude" << endl;
     

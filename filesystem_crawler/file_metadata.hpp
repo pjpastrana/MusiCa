@@ -10,11 +10,11 @@ class FileMetadata
 {
     public:
         string file_name_;
-        // string file_size_;
+        unsigned int file_size_;
         string file_location_;
 
         FileMetadata(){};
-        // TODO: why? A base class destructor should be either public and virtual, or protected and nonvirtual
+        // NOTE: A base class destructor's should be either public and virtual, or protected and nonvirtual
         virtual ~FileMetadata(){};
 
         template <typename Writer>
@@ -25,6 +25,9 @@ class FileMetadata
             
             writer.String("file_location");
             writer.String(file_location_.c_str());
+
+            writer.String("file_size_in_bytes");
+            writer.Uint(file_size_);
         };
 };
 

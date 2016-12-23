@@ -22,7 +22,6 @@ Properties::~Properties()
 
 bool Properties::valid_key(string key)
 {
-    // TODO: how to do error handling
     bool valid = true;
     if(!document.HasMember(key.c_str()))
     {

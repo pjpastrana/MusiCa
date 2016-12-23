@@ -15,11 +15,10 @@ class MusicFileMetadata : public FileMetadata
         string year_;
         string track_;
         string genre_;
-        string bitrate_;
-        string sample_rate_;
-        string channels_;
-        string length_in_minutes_;
-        string length_in_seconds_;
+        int bitrate_;
+        int sample_rate_;
+        int channels_;
+        int length_in_seconds_;
 
         MusicFileMetadata() {};
         ~MusicFileMetadata() {};
@@ -50,19 +49,16 @@ class MusicFileMetadata : public FileMetadata
             writer.String(genre_.c_str());
 
             writer.String("bitrate");
-            writer.String(bitrate_.c_str());
+            writer.Int(bitrate_);
 
             writer.String("sample_rate");
-            writer.String(sample_rate_.c_str());
+            writer.Int(sample_rate_);
 
             writer.String("channels");
-            writer.String(channels_.c_str());
-
-            writer.String("length_in_minutes");
-            writer.String(length_in_minutes_.c_str());
+            writer.Int(channels_);
 
             writer.String("length_in_seconds");
-            writer.String(length_in_seconds_.c_str());
+            writer.Int(length_in_seconds_);
 
             writer.EndObject();
         }
